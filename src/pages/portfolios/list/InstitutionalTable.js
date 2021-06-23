@@ -5,7 +5,8 @@ import {
   CardHeader, 
   CardTitle,
   Button,
-  Row
+  Row,
+  Input
 } from "reactstrap";
 
 import { Link } from "react-router-dom"
@@ -21,6 +22,7 @@ import axios from "axios";
 const InstitutionalTable = ({ currentUser }) => {
 
   const [portfolios, setPortfolios] = useState([]);
+  const [filteredPortfolios, setFilteredPortfolios] = useState([]);
   const [loading, setLoading] = useState(true);
   const rowEvents = {
     onClick: (e, row, rowIndex) => {
@@ -40,6 +42,7 @@ const InstitutionalTable = ({ currentUser }) => {
       if (response.data.success) {
         console.log(response);
         setPortfolios(response.data.data);
+        setFilteredPortfolios(response.data.data);
         setLoading(false);
       } else {
         setLoading(false);
@@ -48,23 +51,25 @@ const InstitutionalTable = ({ currentUser }) => {
       console.error(err);
       setLoading(false);
     })
-  }, [])
+  }, []);
+
+  const handleSearchBar = (event) => {
+    setFilteredPortfolios(portfolios.filter(port => port.portName.toLowerCase().includes(event.target.value.toLowerCase())));
+  }
 
   return loading ? <Loader /> : (
     <Card>
       <CardHeader>
-        <Row className="d-flex justify-content-between">
+        <Row className="d-flex justify-content-between ml-0 mr-0">
           <CardTitle tag="h5">{`Institutional portfolios managed by ${currentUser.name}`}</CardTitle>
           <Link to="/portfolios/add"><Button color="primary btn-pill">New Portfolio</Button></Link>
         </Row>
-        <h6 className="card-subtitle text-muted">
-          Searchbar to filter table will appear here
-        </h6>
+        <Input type="text" placeholder="Search by portfolio name..." style={{width: "25%" }} onChange={handleSearchBar} />
       </CardHeader>
       <CardBody>
         <BootstrapTable
           keyField="name"
-          data={portfolios}
+          data={filteredPortfolios}
           columns={institutionalColumns}
           bootstrap4
           bordered={false}
