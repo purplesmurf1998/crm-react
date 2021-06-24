@@ -33,64 +33,39 @@ class TabsWithTextLabel extends React.Component {
   }
 
   render() {
-    const { name, className, currentUser } = this.props;
-
+    const { name, className, currentUser } = this.props; 
+    
     return (
       <div className={"tab " + className}>
         <Nav tabs>
-          <NavItem>
+          {currentUser.privileges.includes('institutional') && <NavItem>
             <NavLink
-              className={classnames({ active: this.state.activeTab === "1" })}
+              className={classnames({ active: this.state.activeTab === `${currentUser.privileges.indexOf('institutional') + 1}` })}
               onClick={() => {
-                this.toggle("1");
+                this.toggle(`${currentUser.privileges.indexOf('institutional') + 1}`);
               }}
             >
               Institutional
             </NavLink>
-          </NavItem>
-          <NavItem>
+          </NavItem>}
+          {currentUser.privileges.includes('succession') && <NavItem>
             <NavLink
-              className={classnames({ active: this.state.activeTab === "2" })}
+              className={classnames({ active: this.state.activeTab === `${currentUser.privileges.indexOf('succession') + 1}` })}
               onClick={() => {
-                this.toggle("2");
+                this.toggle(`${currentUser.privileges.indexOf('succession') + 1}`);
               }}
             >
               Succession
             </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={classnames({ active: this.state.activeTab === "3" })}
-              onClick={() => {
-                this.toggle("3");
-              }}
-            >
-              Trust
-            </NavLink>
-          </NavItem>
+          </NavItem>}
         </Nav>
         <TabContent activeTab={this.state.activeTab}>
-          <TabPane tabId="1">
+          {currentUser.privileges.includes('institutional') && <TabPane tabId={`${currentUser.privileges.indexOf('institutional') + 1}`}>
             <InstitutionalTable currentUser={currentUser}/>
-          </TabPane>
-          <TabPane tabId="2">
+          </TabPane>}
+          {currentUser.privileges.includes('succession') && <TabPane tabId={`${currentUser.privileges.indexOf('succession') + 1}`}>
             <SuccessionTable currentUser={currentUser}/>
-          </TabPane>
-          <TabPane tabId="3">
-            <h4 className="tab-title">One more</h4>
-            <p>
-              Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-              commodo ligula eget dolor tellus eget condimentum rhoncus. Aenean
-              massa. Cum sociis natoque penatibus et magnis neque dis parturient
-              montes, nascetur ridiculus mus.
-            </p>
-            <p>
-              Donec quam felis, ultricies nec, pellentesque eu, pretium quis,
-              sem. Nulla consequat massa quis enim. Donec pede justo, fringilla
-              vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut,
-              imperdiet a, venenatis vitae, justo.
-            </p>
-          </TabPane>
+          </TabPane>}
         </TabContent>
       </div>
     );
@@ -100,7 +75,7 @@ class TabsWithTextLabel extends React.Component {
 const PortfolioList = ({ currentUser }) => {
 
   return <Container fluid className="p-0">
-    <TabsWithTextLabel currentUser={currentUser}/>
+    {currentUser.privileges.length > 0 && <TabsWithTextLabel currentUser={currentUser}/>}
   </Container>
 };
  

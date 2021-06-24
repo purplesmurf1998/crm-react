@@ -68,7 +68,7 @@ const InstitutionalTable = ({ currentUser }) => {
       </CardHeader>
       <CardBody>
         <BootstrapTable
-          keyField="name"
+          keyField="_id"
           data={filteredPortfolios}
           columns={institutionalColumns}
           bootstrap4

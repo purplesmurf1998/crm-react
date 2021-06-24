@@ -73,7 +73,11 @@ import Changelog from "../pages/docs/Changelog";
 
 // Portfolios
 import PortfolioList from "../pages/portfolios/list/PortfolioList";
-import AddPortfolio from "../pages/portfolios/add/AddPortfolio"
+import AddPortfolio from "../pages/portfolios/add/AddPortfolio";
+
+// Communications
+import CommunicationList from "../pages/communications/list/CommunicationList";
+import AddCommunication from "../pages/communications/add/AddCommunication";
 
 // Dashboards
 const Default = async(() => import("../pages/dashboards/Default"));
@@ -233,6 +237,14 @@ const portfolioRoutes = {
       component: AddPortfolio
     },
   ]
+};
+
+const communicationRoutes = {
+  path: "/communications",
+  name: "Communications",
+  icon: ListIcon,
+  component: CommunicationList,
+  children: null
 };
 
 const authRoutes = {
@@ -598,6 +610,7 @@ export const dashboard = [
   dashboardRoutes,
   pageRoutes,
   portfolioRoutes,
+  communicationRoutes,
   layoutRoutes,
   documentationRoutes,
   uiRoutes,
@@ -624,6 +637,7 @@ export default [
   dashboardRoutes,
   pageRoutes,
   portfolioRoutes,
+  communicationRoutes,
   authRoutes,
   layoutRoutes,
   documentationRoutes,

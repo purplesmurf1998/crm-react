@@ -34,7 +34,7 @@ export const InstitutionalDetails = (props) => {
     <CardBody>
       <Form>
         <Row>
-          <Col md="8">
+          <Col>
             <FormGroup>
               <Label for="trustRole">Market Segment</Label>
               <Input type="select" id="market" value={props.market} onChange={(event) => props.setMarket(event.target.value)}>

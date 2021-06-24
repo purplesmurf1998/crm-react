@@ -34,7 +34,7 @@ export const SuccessionDetails = (props) => {
     <CardBody>
       <Form>
         <Row>
-          <Col md="8">
+          <Col>
             <FormGroup>
               <Label for="portName">Client Name</Label>
               <Input type="text" id="portName" placeholder="Client Name" value={props.clientName} onChange={(event) => props.setClientName(event.target.value)}/>

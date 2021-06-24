@@ -39,7 +39,71 @@ const DefaultDetails = (props) => {
       case "portType": 
         props.setPortType(value.target.value);
         break;
+      default:
+        break;
     }
+  }
+
+  const portTypes = [
+    {
+      value: "Institutional",
+      label: "Institutional"
+    },
+    {
+      value: "Succession",
+      label: "Succession"
+    },
+    {
+      value: "Trust",
+      label: "Trust"
+    }
+  ]
+
+  const customStyles = {
+    control: (provided, state) => ({
+      ...provided,
+      background: '#fff',
+      borderColor: '#ced4da',
+      minHeight: '32px',
+      height: '32px',
+      boxShadow: state.isFocused ? null : null,
+    }),
+
+    valueContainer: (provided, state) => ({
+      ...provided,
+      height: '32px',
+      padding: '0 6px'
+    }),
+
+    input: (provided, state) => ({
+      ...provided,
+      margin: '0px',
+    }),
+    indicatorSeparator: state => ({
+      display: 'none',
+    }),
+    indicatorsContainer: (provided, state) => ({
+      ...provided,
+      height: '32px',
+    }),
+  };
+
+  const handlePortTypeSelect = (select) => {
+    select ? (
+      handlePortDetailChange({
+        target: {
+          id: 'portType', 
+          value: select.value
+        }
+      })
+    ) : (
+      handlePortDetailChange({
+        target: {
+          id: 'portType', 
+          value: 'None'
+        }
+      })
+    )
   }
   
   return <Card>
@@ -51,7 +115,7 @@ const DefaultDetails = (props) => {
     <CardBody>
       <Form>
         <Row>
-          <Col md="8">
+          <Col>
             <FormGroup>
               <Label for="portName">Portfolio Name</Label>
               <Input type="text" id="portName" placeholder="Portfolio Name" value={props.portName} onChange={handlePortDetailChange}/>
@@ -73,12 +137,13 @@ const DefaultDetails = (props) => {
             </FormGroup>
             <FormGroup>
               <Label for="portType">Portfolio Type</Label>
-              <Input type="select" id="portType" value={props.portType} onChange={handlePortDetailChange}>
+              <Select id="portType" options={portTypes} onChange={handlePortTypeSelect} isClearable={true} styles={customStyles}></Select>
+              {/* <Input type="select" id="portType" value={props.portType} onChange={handlePortDetailChange}>
               <option value="None">Select Portfolio Type</option>
               <option value="Institutional">Institutional</option>
               <option value="Succession">Succession</option>
               <option value="Trust">Trust</option>
-              </Input>
+              </Input> */}
             </FormGroup>
           </Col>
         </Row>
@@ -128,7 +193,7 @@ const ManagerDetails = ({ manager, associates, setManager, setAssociates }) => {
     <CardBody>
       <Form>
         <Row>
-          <Col md="8">
+          <Col>
             <FormGroup>
               <Label>Portfolio Manager</Label>
               <Select options={userList} onChange={handleManagerChange} isClearable={true} value={manager}></Select>
