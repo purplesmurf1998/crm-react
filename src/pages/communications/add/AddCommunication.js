@@ -17,7 +17,8 @@ import {
   ListGroup,
   ListGroupItem,
   Row,
-  UncontrolledDropdown
+  UncontrolledDropdown,
+  Alert
 } from "reactstrap";
 import axios from "axios";
 
@@ -25,7 +26,7 @@ import { MoreHorizontal } from "react-feather";
 import Select from "react-select";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import { faCommentsDollar, faUpload } from "@fortawesome/free-solid-svg-icons";
 
 import Loader from "../../../components/Loader";
 
@@ -86,12 +87,15 @@ const CommunicationInfo = (props) => {
     }),
   };
 
-  return <Form onSubmit={() => console.log("Submit new communication")}>
+  return <Form onSubmit={props.handleSubmit}>
+    {props.error && <Row className="d-flex justify-content-center">
+      <Alert className="p-2" color="danger">{props.error}</Alert>
+    </Row>}
     <Row>
       <Col>
         <FormGroup>
           <Label for="inputUsername">Portfolio</Label>
-          <Select options={props.contactList} isClearable={true} styles={customStyles}></Select>
+          <Select options={props.portfolioList} isClearable={true} styles={customStyles} onChange={(port) => props.setPortfolio(port.value)}></Select>
         </FormGroup>
         <FormGroup>
           <Row>
@@ -99,19 +103,19 @@ const CommunicationInfo = (props) => {
               <Label>Date</Label>
             </Col>
             <Col>
-              <DatePicker selected={new Date()} style={{borderColor: '#ced4da'}} />         
+              <DatePicker selected={new Date()} style={{borderColor: '#ced4da'}} value={props.date} onChange={(date) => console.log(date)}/>         
             </Col>
             <Col>
               <Label>Method</Label>
             </Col>
             <Col>
-              <Select options={methodList} isClearable={true} styles={customStyles}></Select>
+              <Select options={methodList} isClearable={true} styles={customStyles} value={props.method} onChange={(method) => props.setMethod(method.value)}></Select>
             </Col>
           </Row>
         </FormGroup>
         <FormGroup>
           <Label for="inputUsername">Subject</Label>
-          <Input type="text" placeholder="Subject" />
+          <Input type="text" placeholder="Subject" value={props.subject} onChange={(subject) => props.setSubject(subject.target.value)}/>
         </FormGroup>
         <FormGroup>
           <Label for="inputBio">Description</Label>
@@ -120,11 +124,13 @@ const CommunicationInfo = (props) => {
             rows="10"
             id="inputBio"
             placeholder="Details of the communication"
+            value={props.content}
+            onChange={(description) => props.setContent(description.target.value)}
           />
         </FormGroup>
         <FormGroup>
           <Label for="inputUsername">Contact(s)</Label>
-          <Select options={props.contactList} isClearable={true} isMulti></Select>
+          <Select options={props.contactList} isClearable={true} isMulti onChange={(contacts) => props.setContactList(contacts)}></Select>
         </FormGroup>
       </Col>
     </Row>
@@ -139,13 +145,15 @@ const AddCommunication = ({ currentUser, toggle }) => {
 
   const [loading, setLoading] = useState(true);
   const [contactList, setContactList] = useState([]);
+  const [portfolioList, setPortfolioList] = useState([]);
+  const [error, setError] = useState(null)
 
   const [subject, setSubject] = useState("");
   const [content, setContent] = useState("");
-  const [date, setDate] = useState("");
-  const [method, setMethod] = useState("");
-  const [portfolio, setPortfolio] = useState("");
-  const [contacts, setContacts] = useState("");
+  const [date, setDate] = useState(new Date());
+  const [method, setMethod] = useState(null)
+  const [portfolio, setPortfolio] = useState(null); 
+  const [contacts, setContacts] = useState([]);
 
   useEffect(() => {
     axios({
@@ -161,7 +169,23 @@ const AddCommunication = ({ currentUser, toggle }) => {
           })
         });
         setContactList(tempContactList);
-        setLoading(false)
+        axios({
+          method: 'get',
+          url: '/api/v1/portfolios'
+        }).then((response) => {
+          let tempPortList = []
+          response.data.data.forEach((port, index) => {
+            tempPortList.push({
+              value: port._id,
+              label: port.portName
+            })
+          });
+          setPortfolioList(tempPortList);
+          setLoading(false);
+        }).catch((err) => {
+          console.log(err);
+          setLoading(false);
+        });
       } else {
         console.log(response);
         setLoading(false);
@@ -170,12 +194,34 @@ const AddCommunication = ({ currentUser, toggle }) => {
       console.error(err);
       setLoading(false);
     })
-  }, [])
+  }, []);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // basic form validation
+    // TODO: Improve for visual feedback
+    if (subject === "" || !method || !portfolio || !date) {
+      setError("Missing information. Make sure to enter required fields")
+      setTimeout(() => {
+        setError(null);
+      }, 3000)
+    } else {
+      console.log("Information good, submit");
+      console.log(subject);
+      console.log(content);
+      console.log(date);
+      console.log(method);
+      console.log(portfolio);
+    }
+  }
   
   return loading ? <Loader /> : ( 
     <CommunicationInfo
+      error={error}
+      handleSubmit={handleSubmit}
       toggle={toggle}
       contactList={contactList}
+      portfolioList={portfolioList}
       subject={subject}
       content={content}
       date={date}
