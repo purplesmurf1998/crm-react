@@ -9,7 +9,7 @@ import {
   Input
 } from "reactstrap";
 
-import { Link } from "react-router-dom"
+import { Link, Redirect } from "react-router-dom"
 
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
@@ -24,9 +24,11 @@ const InstitutionalTable = ({ currentUser }) => {
   const [portfolios, setPortfolios] = useState([]);
   const [filteredPortfolios, setFilteredPortfolios] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedPort, setSelectedPort] = useState(null)
   const rowEvents = {
     onClick: (e, row, rowIndex) => {
-      console.log(row);
+      // VERY temporary, find a more scalable way of doing this
+      window.location.href= `http://localhost:3000/portfolios/institutional/${row._id}`;
     }
   }
 

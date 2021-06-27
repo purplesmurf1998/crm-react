@@ -95,7 +95,7 @@ const CommunicationInfo = (props) => {
       <Col>
         <FormGroup>
           <Label for="inputUsername">Portfolio</Label>
-          <Select options={props.portfolioList} isClearable={true} styles={customStyles} onChange={(port) => props.setPortfolio(port.value)}></Select>
+          <Select options={props.portfolioList} isClearable={true} styles={customStyles} onChange={(port) => props.setPortfolio(port)}></Select>
         </FormGroup>
         <FormGroup>
           <Row>
@@ -109,7 +109,7 @@ const CommunicationInfo = (props) => {
               <Label>Method</Label>
             </Col>
             <Col>
-              <Select options={methodList} isClearable={true} styles={customStyles} value={props.method} onChange={(method) => props.setMethod(method.value)}></Select>
+              <Select options={methodList} isClearable={true} styles={customStyles} value={props.method} onChange={(method) => props.setMethod(method)}></Select>
             </Col>
           </Row>
         </FormGroup>
@@ -130,7 +130,7 @@ const CommunicationInfo = (props) => {
         </FormGroup>
         <FormGroup>
           <Label for="inputUsername">Contact(s)</Label>
-          <Select options={props.contactList} isClearable={true} isMulti onChange={(contacts) => props.setContactList(contacts)}></Select>
+          <Select options={props.contactList} isClearable={true} isMulti onChange={(contacts) => contacts ? props.setContacts(contacts) : props.setContacts([])}></Select>
         </FormGroup>
       </Col>
     </Row>
@@ -207,11 +207,42 @@ const AddCommunication = ({ currentUser, toggle }) => {
       }, 3000)
     } else {
       console.log("Information good, submit");
-      console.log(subject);
-      console.log(content);
-      console.log(date);
-      console.log(method);
-      console.log(portfolio);
+      // convert contact list if any contacts
+      let formattedContacts = [];
+      if (contacts.length > 0) {
+        contacts.forEach((contact, index) => {
+          formattedContacts.push(contact.value);
+        })
+      }
+      axios({
+        method: 'post',
+        url: 'api/v1/communications',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: {
+          subject,
+          content,
+          date,
+          method: method.value,
+          portfolio: portfolio.value,
+          contacts: formattedContacts
+        }
+      }).then((results) => {
+        if (results.data.success) {
+          window.location.reload();
+        } else {
+          setError(results.data.message)
+          setTimeout(() => {
+            setError(null);
+          }, 3000);
+        }
+      }).catch((err) => {
+        setError(err)
+        setTimeout(() => {
+          setError(null);
+        }, 3000);
+      });
     }
   }
   

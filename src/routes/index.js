@@ -74,6 +74,7 @@ import Changelog from "../pages/docs/Changelog";
 // Portfolios
 import PortfolioList from "../pages/portfolios/list/PortfolioList";
 import AddPortfolio from "../pages/portfolios/add/AddPortfolio";
+import ViewInstitutionalPort from "../pages/portfolios/view/ViewInstitutionalPort";
 
 // Communications
 import CommunicationList from "../pages/communications/list/CommunicationList";
@@ -593,16 +594,11 @@ const calendarRoutes = {
 };
 
 // This route is not visisble in the sidebar
-const privateRoutes = {
-  path: "/private",
-  name: "Private",
-  children: [
-    {
-      path: "/private/blank",
-      name: "Blank Page",
-      component: Blank
-    }
-  ]
+const institutionalPortfolioDetails = {
+  path: "/portfolios/institutional/:id",
+  name: "Institutional Portfolio Details",
+  children: null,
+  component: ViewInstitutionalPort
 };
 
 // Dashboard specific routes
@@ -623,7 +619,7 @@ export const dashboard = [
   notificationsRoutes,
   mapRoutes,
   calendarRoutes,
-  privateRoutes
+  institutionalPortfolioDetails
 ];
 
 // Landing specific routes
