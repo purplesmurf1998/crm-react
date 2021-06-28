@@ -25,7 +25,8 @@ const SuccessionTable = ({ currentUser }) => {
   const [loading, setLoading] = useState(true);
   const rowEvents = {
     onClick: (e, row, rowIndex) => {
-      console.log(row);
+       // VERY temporary, find a more scalable way of doing this
+       window.location.href= `http://localhost:3000/portfolios/${row._id}`;
     }
   }
 

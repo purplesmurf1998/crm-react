@@ -74,7 +74,7 @@ import Changelog from "../pages/docs/Changelog";
 // Portfolios
 import PortfolioList from "../pages/portfolios/list/PortfolioList";
 import AddPortfolio from "../pages/portfolios/add/AddPortfolio";
-import ViewInstitutionalPort from "../pages/portfolios/view/ViewInstitutionalPort";
+import ViewPortfolio from "../pages/portfolios/view/ViewPortfolio";
 
 // Communications
 import CommunicationList from "../pages/communications/list/CommunicationList";
@@ -595,10 +595,10 @@ const calendarRoutes = {
 
 // This route is not visisble in the sidebar
 const institutionalPortfolioDetails = {
-  path: "/portfolios/institutional/:id",
-  name: "Institutional Portfolio Details",
+  path: "/portfolios/:id",
+  name: "Portfolio Details",
   children: null,
-  component: ViewInstitutionalPort
+  component: ViewPortfolio
 };
 
 // Dashboard specific routes

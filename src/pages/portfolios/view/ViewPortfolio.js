@@ -27,8 +27,8 @@ import {
 
 import { MoreHorizontal } from "react-feather";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import InstitutionalDetails from "./InstitutionalDetails";
+import SuccessionDetails from "./SuccessionDetails";
 
 const Navigation = (props) => {
   return <Card>
@@ -51,8 +51,23 @@ const Navigation = (props) => {
   </Card>
 };
 
-const PrivateInfo = ({ portfolio }) => (
-  <Card>
+const PrivateInfo = ({ portfolio }) => {
+
+  const getFormattedDate = (date) => {
+    if (!date) {
+      return "";
+    }
+
+    const dateObj = new Date(date.substring(0, 19));
+    const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(dateObj);
+    const mo = new Intl.DateTimeFormat('en', { month: 'long' }).format(dateObj);
+    const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(dateObj);
+    const dateStr = `${mo} ${da}, ${ye}`;
+
+    return dateStr;
+  }
+
+  return <Card>
     <CardBody>
       <Row>
         <CardTitle tag="h5" className="mb-0 mr-3 ml-2">
@@ -99,7 +114,7 @@ const PrivateInfo = ({ portfolio }) => (
           <Label>Date Opened</Label>
         </Col>
         <Col className="d-flex justify-content-end">
-          <Label>{ portfolio.createdAt }</Label>
+          <Label>{ getFormattedDate(portfolio.createdAt) }</Label>
         </Col>
       </Row>
       <Row className="d-flex justify-content-between">
@@ -107,7 +122,7 @@ const PrivateInfo = ({ portfolio }) => (
           <Label>Date Closed</Label>
         </Col>
         <Col className="d-flex justify-content-end">
-          <Label>{ portfolio.closedAt }</Label>
+          <Label>{ getFormattedDate(portfolio.closedAt) }</Label>
         </Col>
       </Row>
       <Row className="d-flex justify-content-between">
@@ -120,49 +135,28 @@ const PrivateInfo = ({ portfolio }) => (
       </Row>
     </CardBody>
   </Card>
-);
+};
 
-const InstitutionalDetails = ({ portfolio }) => (
-  <Card>
-    <CardBody>
-      <Row>
-        <CardTitle tag="h5" className="mb-0 mr-3 ml-2">
-          Institutional Information
-        </CardTitle>
-        <div className="card-actions">
-          <UncontrolledDropdown>
-            <DropdownToggle tag="a">
-              <MoreHorizontal />
-            </DropdownToggle>
-            <DropdownMenu right>
-              <DropdownItem>Edit Information</DropdownItem>
-            </DropdownMenu>
-          </UncontrolledDropdown>
-          </div>
-      </Row>
-      <hr></hr>
-      <Row className="d-flex justify-content-between">
-        <Col className="d-flex justify-content-start">
-          <Label>Market Segment</Label>
-        </Col>
-        <Col className="d-flex justify-content-end">
-          <Label>{ portfolio.institutional.market }</Label>
-        </Col>
-      </Row>
-      <Row className="d-flex justify-content-between">
-        <Col className="d-flex justify-content-start">
-          <Label>Portfolio Status</Label>
-        </Col>
-        <Col className="d-flex justify-content-end">
-          <Label>{ portfolio.institutional.status }</Label>
-        </Col>
-      </Row>
-    </CardBody>
-  </Card>
-);
+const CondensedTable = ({ portId }) => {
 
-const CondensedTable = () => (
-  <Card>
+  const [loading, setLoading] = useState(true);
+  const [contacts, setContacts] = useState([]);
+
+  useEffect(() => {
+    axios({
+      method: 'get',
+      url: `/api/v1/portfolios/${portId}/contacts`
+    }).then((result) => {
+      console.log(result.data);
+      setContacts(result.data.data);
+      setLoading(false);
+    }).catch((err) => {
+      console.error(err);
+      setLoading(false);
+    })
+  }, [])
+
+  return loading ? <Loader /> : <Card>
     <CardHeader>
       <Row>
         <CardTitle tag="h5" className="mb-0 mr-3 ml-2">
@@ -175,72 +169,34 @@ const CondensedTable = () => (
             </DropdownToggle>
             <DropdownMenu right>
               <DropdownItem>Add Contact</DropdownItem>
-              <DropdownItem style={{color: 'red'}}>Remove Contact</DropdownItem>
+              {contacts.length > 0 && <DropdownItem style={{color: 'red'}}>Remove Contact</DropdownItem>}
             </DropdownMenu>
           </UncontrolledDropdown>
           </div>
       </Row>
     </CardHeader>
-    <Table size="sm" striped hover>
+    {contacts.length > 0 ? <Table size="sm" striped hover>
         <thead>
           <tr>
             <th>Contact Name</th>
-            <th className="text-right">Email</th>
             <th className="text-right">Role</th>
+            <th className="text-right">Email</th>
           </tr>
         </thead>
         <tbody>
-          <tr style={{cursor: 'pointer'}}>
-            <td>Windows</td>
-            <td className="text-right">8.232</td>
-            <td className="text-right">40%</td>
-          </tr>
-          <tr style={{cursor: 'pointer'}}>
-            <td>Mac OS</td>
-            <td className="text-right">3.322</td>
-            <td className="text-right">20%</td>
-          </tr>
-          <tr style={{cursor: 'pointer'}}>
-            <td>Linux</td>
-            <td className="text-right">4.232</td>
-            <td className="text-right">34%</td>
-          </tr>
-          <tr style={{cursor: 'pointer'}}>
-            <td>FreeBSD</td>
-            <td className="text-right">1.121</td>
-            <td className="text-right">12%</td>
-          </tr>
-          <tr style={{cursor: 'pointer'}}>
-            <td>Chrome OS</td>
-            <td className="text-right">1.331</td>
-            <td className="text-right">15%</td>
-          </tr>
-          <tr style={{cursor: 'pointer'}}>
-            <td>Android</td>
-            <td className="text-right">2.301</td>
-            <td className="text-right">20%</td>
-          </tr>
-          <tr style={{cursor: 'pointer'}}>
-            <td>iOS</td>
-            <td className="text-right">1.162</td>
-            <td className="text-right">14%</td>
-          </tr>
-          <tr style={{cursor: 'pointer'}}>
-            <td>Windows Phone</td>
-            <td className="text-right">562</td>
-            <td className="text-right">7%</td>
-          </tr>
-          <tr style={{cursor: 'pointer'}}>
-            <td>Other</td>
-            <td className="text-right">1.181</td>
-            <td className="text-right">14%</td>
-          </tr>
+          {contacts.map((contact, index) => {
+            return <tr style={{cursor: 'pointer'}}>
+              <td>{contact.contact.fullname}</td>
+              <td className="text-right">{contact.role}</td>
+              <td className="text-right"><a href="#">{contact.contact.email1}</a></td>
+            </tr>
+          })}
         </tbody>
-      </Table>
+      </Table> : <Row className="d-flex justify-content-center mb-3">No contacts in this portfolio.</Row>}
   </Card>
-);
+};
 
-const ViewInstitutionalPort = () => {
+const ViewPortfolio = () => {
 
   const { id } = useParams();
   const [portfolio, setPortfolio] = useState(null);
@@ -274,11 +230,12 @@ const ViewInstitutionalPort = () => {
       </Col>
       <Col md="9" xl="10">
         <PrivateInfo portfolio={portfolio} />
-        <InstitutionalDetails portfolio={portfolio} />
-        <CondensedTable />
+        {portfolio.institutional && <InstitutionalDetails portfolio={portfolio} />}
+        {portfolio.succession && <SuccessionDetails portfolio={portfolio} />}
+        <CondensedTable portId={id}/>
       </Col>
     </Row>
   </Container>
 }
  
-export default ViewInstitutionalPort;
+export default ViewPortfolio;

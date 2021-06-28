@@ -28,7 +28,7 @@ const InstitutionalTable = ({ currentUser }) => {
   const rowEvents = {
     onClick: (e, row, rowIndex) => {
       // VERY temporary, find a more scalable way of doing this
-      window.location.href= `http://localhost:3000/portfolios/institutional/${row._id}`;
+      window.location.href= `http://localhost:3000/portfolios/${row._id}`;
     }
   }
 
