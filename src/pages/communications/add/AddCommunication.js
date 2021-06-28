@@ -1,35 +1,17 @@
 import React, {useState, useEffect} from "react";
 import {
   Button,
-  Card,
-  CardBody,
-  CardHeader,
-  CardTitle,
   Col,
-  Container,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
   Form,
   FormGroup,
   Input,
   Label,
-  ListGroup,
-  ListGroupItem,
   Row,
-  UncontrolledDropdown,
   Alert
 } from "reactstrap";
 import axios from "axios";
-
-import { MoreHorizontal } from "react-feather";
 import Select from "react-select";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCommentsDollar, faUpload } from "@fortawesome/free-solid-svg-icons";
-
 import Loader from "../../../components/Loader";
-
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 

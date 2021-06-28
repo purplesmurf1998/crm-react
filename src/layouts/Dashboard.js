@@ -18,7 +18,7 @@ const Dashboard = ({ children, currentUser }) => (
         <Footer />
       </Main>
     </Wrapper>
-    <Settings />
+    {/* <Settings /> */}
   </React.Fragment>
 );
 

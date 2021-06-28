@@ -78,7 +78,9 @@ import ViewPortfolio from "../pages/portfolios/view/ViewPortfolio";
 
 // Communications
 import CommunicationList from "../pages/communications/list/CommunicationList";
-import AddCommunication from "../pages/communications/add/AddCommunication";
+
+// Contacts
+import Contacts from "../pages/contacts/view/Contacts";
 
 // Dashboards
 const Default = async(() => import("../pages/dashboards/Default"));
@@ -238,6 +240,14 @@ const portfolioRoutes = {
       component: AddPortfolio
     },
   ]
+};
+
+const contactRoutes = {
+  path: "/contacts",
+  name: "Contacts",
+  icon: UsersIcon,
+  component: Contacts,
+  children: null
 };
 
 const communicationRoutes = {
@@ -607,6 +617,7 @@ export const dashboard = [
   pageRoutes,
   portfolioRoutes,
   communicationRoutes,
+  contactRoutes,
   layoutRoutes,
   documentationRoutes,
   uiRoutes,
@@ -634,6 +645,7 @@ export default [
   pageRoutes,
   portfolioRoutes,
   communicationRoutes,
+  contactRoutes,
   authRoutes,
   layoutRoutes,
   documentationRoutes,
