@@ -57,7 +57,7 @@ const SignIn = () => {
   }
   
   return redirect ? (
-    <Redirect to='/dashboard/default' />  
+    <Redirect to='/dashboard' />  
   ) : (
     <React.Fragment>
       <div className="text-center mt-4">

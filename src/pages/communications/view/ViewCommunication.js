@@ -4,9 +4,10 @@ import axios from "axios";
 import Loader from "../../../components/Loader";
 import "react-datepicker/dist/react-datepicker.css";
 
-const AddCommunication = ({ currentUser, toggle }) => {
+const ViewCommunication = ({ currentUser, toggle, selectedComm }) => {
 
   const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(true);
 
   const [subject, setSubject] = useState("");
   const [content, setContent] = useState("");
@@ -14,6 +15,43 @@ const AddCommunication = ({ currentUser, toggle }) => {
   const [method, setMethod] = useState(null)
   const [portfolio, setPortfolio] = useState(null); 
   const [contacts, setContacts] = useState([]);
+
+  useEffect(() => {
+    axios({
+      method: 'get',
+      url: `/api/v1/communications/${selectedComm._id}`
+    }).then((response) => {
+      if (response.data.success) {
+        const comm = response.data.data;
+        console.log(comm);
+        const tempContacts = []
+        comm.contacts.forEach(contact => {
+          tempContacts.push({
+            value: contact._id,
+            label: `${contact.contact.fullname} : ${contact.portfolio.portName}`
+          });
+        });
+        setContacts(tempContacts);
+        setPortfolio({
+          value: comm.portfolio._id,
+          label: comm.portfolio.portName
+        });
+        setSubject(comm.subject);
+        setContent(comm.content);
+        setMethod({
+          value: comm.method,
+          label: comm.method
+        });
+        setDate(comm.date);
+        setLoading(false);
+      } else {
+        setLoading(false);
+      }
+    }).catch((err) => {
+      console.error(err);
+      setLoading(false);
+    })
+  }, [])
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -66,8 +104,8 @@ const AddCommunication = ({ currentUser, toggle }) => {
       });
     }
   }
-  
-  return ( 
+
+  return loading ? <Loader /> : ( 
     <CommunicationInfo
       error={error}
       handleSubmit={handleSubmit}
@@ -88,4 +126,4 @@ const AddCommunication = ({ currentUser, toggle }) => {
    );
 }
  
-export default AddCommunication;
+export default ViewCommunication;

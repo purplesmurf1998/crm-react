@@ -1,7 +1,3 @@
-const tableData = [
-  
-];
-
 const tableColumns = [
   {
     dataField: "date",
@@ -25,4 +21,4 @@ const tableColumns = [
   }
 ];
 
-export { tableData, tableColumns };
+export { tableColumns };

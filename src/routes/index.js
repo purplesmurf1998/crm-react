@@ -13,7 +13,8 @@ import {
   Monitor as MonitorIcon,
   PieChart as PieChartIcon,
   Sliders as SlidersIcon,
-  Users as UsersIcon
+  Users as UsersIcon,
+  PlusSquare as Plus
 } from "react-feather";
 
 // Landing
@@ -130,44 +131,27 @@ const landingRoutes = {
   children: null
 };
 
-const dashboardRoutes = {
+const dashboardRoute = {
   path: "/dashboard",
-  name: "Dashboards",
-  header: "Pages",
+  name: "Dashboard",
+  header: "View",
   badgeColor: "primary",
   badgeText: "5",
   icon: SlidersIcon,
   containsHome: true,
-  children: [
-    {
-      path: "/dashboard/default",
-      name: "Default",
-      component: Default
-    },
-    {
-      path: "/dashboard/analytics",
-      name: "Analytics",
-      component: Analytics
-    },
-    {
-      path: "/dashboard/e-commerce",
-      name: "E-commerce",
-      component: Ecommerce
-    },
-    {
-      path: "/dashboard/social",
-      name: "Social",
-      component: Social
-    },
-    {
-      path: "/dashboard/crypto",
-      name: "Crypto",
-      component: Crypto,
-      badgeColor: "primary",
-      badgeText: "New"
-    }
-  ]
+  children: null,
+  component: Default
 };
+
+const taskRoutes = {
+  path: "/tasks",
+  name: "Tasks",
+  badgeColor: "danger",
+  badgeText: "3",
+  icon: BookOpenIcon,
+  children: null,
+  component: Tasks
+}
 
 const pageRoutes = {
   path: "/pages",
@@ -224,22 +208,12 @@ const pageRoutes = {
   ]
 };
 
-const portfolioRoutes = {
-  path: "/portfolios",
+const viewPortfolioRoute = {
+  path: "/portfolios/list",
   name: "Portfolios",
   icon: LayoutIcon,
-  children: [
-    {
-      path: "/portfolios/list",
-      name: "Portfolio List",
-      component: PortfolioList
-    },
-    {
-      path: "/portfolios/add",
-      name: "New Portfolio",
-      component: AddPortfolio
-    },
-  ]
+  children: null,
+  component: PortfolioList
 };
 
 const contactRoutes = {
@@ -257,6 +231,15 @@ const communicationRoutes = {
   component: CommunicationList,
   children: null
 };
+
+const addPortfolioRoute = {
+  path: "/portfolios/add",
+  name: "Add Portfolio",
+  header: "Add",
+  icon: Plus,
+  children: null,
+  component: AddPortfolio
+}
 
 const authRoutes = {
   path: "/auth",
@@ -613,11 +596,13 @@ const institutionalPortfolioDetails = {
 
 // Dashboard specific routes
 export const dashboard = [
-  dashboardRoutes,
+  dashboardRoute,
   pageRoutes,
-  portfolioRoutes,
+  viewPortfolioRoute,
   communicationRoutes,
+  taskRoutes,
   contactRoutes,
+  addPortfolioRoute,
   layoutRoutes,
   documentationRoutes,
   uiRoutes,
@@ -641,22 +626,24 @@ export const auth = [authRoutes];
 
 // All routes
 export default [
-  dashboardRoutes,
-  pageRoutes,
-  portfolioRoutes,
+  dashboardRoute,
+  //pageRoutes,
+  viewPortfolioRoute,
   communicationRoutes,
+  taskRoutes,
   contactRoutes,
-  authRoutes,
-  layoutRoutes,
-  documentationRoutes,
-  uiRoutes,
-  iconRoutes,
-  formRoutes,
-  tableRoutes,
-  formPluginsRoutes,
-  advancedTablesRoutes,
-  chartRoutes,
-  notificationsRoutes,
-  mapRoutes,
-  calendarRoutes
+  addPortfolioRoute,
+  // authRoutes,
+  // layoutRoutes,
+  // documentationRoutes,
+  // uiRoutes,
+  // iconRoutes,
+  // formRoutes,
+  // tableRoutes,
+  // formPluginsRoutes,
+  // advancedTablesRoutes,
+  // chartRoutes,
+  // notificationsRoutes,
+  // mapRoutes,
+  // calendarRoutes
 ];
